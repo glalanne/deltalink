@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "deltalink"
+version = "0.1.0"
+description = ""
+authors = ["Geoffrey Lalanne <geoffrey@lalanne.ca>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+getdaft = {extras = ["deltalake", "sql", "unity"], version = "^0.4.0"}
+fastapi = {extras = ["standard"], version = "^0.115.6"}
+httpx = "0.27.2"
+sql-metadata = "^2.15.0"
+pydantic-settings = "^2.7.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

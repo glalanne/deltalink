@@ -1,17 +1,20 @@
 from datetime import datetime
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 import daft
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from daft.unity_catalog import  UnityCatalogTable
+from fastapi_msal import AuthToken, UserInfo
 from pydantic import BaseModel
 from sql_metadata import Parser
+from deltalink.core.auth import get_auth
 from deltalink.core.util import table_config
 from deltalink.dependencies import get_unity
 from daft.sql import SQLCatalog
 
 router = APIRouter()
+auth = get_auth()
 
 class Query(BaseModel):
     query: str
@@ -47,7 +50,7 @@ async def load_table(catalog: str, schema: str, table: str):
 
 
 @router.post("/query", tags=["Query"])
-def send_query(
+async def send_query(
     query: Annotated[
         Query,
         Body(
@@ -57,8 +60,20 @@ def send_query(
                 }
             ]
         ),
-    ]
+    ],
+    request: Request,
+    user: UserInfo = Depends(auth.scheme)
+    
 ):
+    token: Optional[AuthToken] = await auth.handler.get_token_from_session(request=request)
+    if not token or not token.access_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect jwt token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    dbx_token = auth.handler.msal_app()._cca.acquire_token_on_behalf_of(token.access_token,["https://azuredatabricks.net//user_impersonation"])
     start = datetime.now()
     parser = Parser(query.query)
     tables = parser.tables

@@ -12,6 +12,8 @@ fastapi = {extras = ["standard"], version = "^0.115.6"}
 httpx = "0.27.2"
 sql-metadata = "^2.15.0"
 pydantic-settings = "^2.7.0"
+fastapi-msal = "^2.1.6"
+itsdangerous = "^2.2.0"
 
 
 [build-system]

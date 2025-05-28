@@ -38,4 +38,4 @@ async def read_users_me(current_user: UserInfo = Depends(msal_auth.scheme)) -> U
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="localhost", port=8000)

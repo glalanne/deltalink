@@ -14,6 +14,8 @@ sql-metadata = "^2.15.0"
 pydantic-settings = "^2.7.0"
 fastapi-msal = "^2.1.6"
 itsdangerous = "^2.2.0"
+deltalake = "^0.25.5"
+pandas = "^2.2.3"
 
 
 [build-system]

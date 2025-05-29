@@ -1,4 +1,5 @@
-from typing import Dict, Iterable, List, Literal, Optional
+from collections.abc import Iterable
+from typing import Literal, Optional
 
 from pydantic import BaseModel
 
@@ -68,7 +69,7 @@ class DeltaTable(BaseModel):
     name: str
     """Name of schema, relative to parent catalog."""
 
-    properties: Optional[Dict[str, str]] = None
+    properties: Optional[dict[str, str]] = None
     """A map of key-value properties attached to the securable."""
 
     columns: Iterable[DeltaTableColumn]
@@ -92,7 +93,7 @@ class DeltaTableInfo(BaseModel):
     name: Optional[str] = None
     """Name of schema, relative to parent catalog."""
 
-    properties: Optional[Dict[str, str]] = None
+    properties: Optional[dict[str, str]] = None
     """A map of key-value properties attached to the securable."""
 
     schema_id: Optional[str] = None
@@ -106,22 +107,23 @@ class DeltaTableInfo(BaseModel):
 
 
 class DeltaTableMerge(BaseModel):
-    # catalog: str
-    # schema: str
-    # table: str
-    values: List[object]  # data to merge into the table
+    catalog_name: str
+    schema_name: str
+    table_name: str
+    values: list[object]  # data to merge into the table
     predicate: str  # condition for matching rows
-    updates: dict[str, str]  # mapping of target column to source column
+    updates: Optional[dict[str, str]] = None 
+    """mapping of target column to source column"""
 
 class DeltaTableInsert(BaseModel):
-    # catalog: str
-    # schema: str
-    # table: str
-    values: List[object]  # data to merge into the table
+    catalog_name: str
+    schema_name: str
+    table_name: str
+    values: list[object]  # data to merge into the table
 
 class DeltaTableDelete(BaseModel):
-    # catalog: str
-    # schema: str
-    # table: str
-    values: List[object]  # data to merge into the table
+    catalog_name: str
+    schema_name: str
+    table_name: str
+    values: list[object]  # data to merge into the table
     predicate: str  # condition for matching rows

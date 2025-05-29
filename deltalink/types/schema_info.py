@@ -1,6 +1,7 @@
-from typing import Dict, Optional
+from typing import Optional
 
 from pydantic import BaseModel
+
 
 class SchemaInfo(BaseModel):
     catalog_name: Optional[str] = None
@@ -18,7 +19,7 @@ class SchemaInfo(BaseModel):
     name: Optional[str] = None
     """Name of schema, relative to parent catalog."""
 
-    properties: Optional[Dict[str, str]] = None
+    properties: Optional[dict[str, str]] = None
     """A map of key-value properties attached to the securable."""
 
     schema_id: Optional[str] = None

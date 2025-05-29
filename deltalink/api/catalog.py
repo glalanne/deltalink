@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+import unitycatalog
+from fastapi import APIRouter, Depends, HTTPException
 
 from deltalink.core.auth import get_auth
 from deltalink.core.config import settings
@@ -113,3 +114,40 @@ async def create_table(catalog: str, schema: str, table: DeltaTable) -> DeltaTab
         columns=table.columns,
         storage_location=f"{settings.STORAGE_LOCATION}/{catalog}/{schema}/{table.name}/",
     )
+
+
+@router.get(
+    "/catalogs/{catalog}/schemas/{schema}/tables/{table_name}",
+    summary="Get the table information from UC schema",
+    description="Retrieve information about a specific table in Unity Catalog.",
+    response_model=DeltaTableInfo,
+    response_description="Information about the specified table.",
+    responses={
+        200: {
+            "description": "Information about the specified table.",
+            "content": {
+                "application/json": {"example": {"name": "table1", "columns": []}}
+            },
+        },
+        404: {"description": "Table not found."},
+    },
+    tags=["Catalog"],
+)
+async def get_table_info(
+    catalog_name: str, schema_name: str, table_name: str
+) -> DeltaTableInfo:
+    unity = await get_unity()
+
+    try:
+        uc_table = unity._client.tables.retrieve(
+            f"{catalog_name}.{schema_name}.{table_name}"
+        )
+
+        return uc_table
+    except unitycatalog.NotFoundError as e:
+        raise HTTPException(status_code=404, detail=e.message) from e
+
+    except Exception as e:  # pragma: no cover
+        raise HTTPException(
+            status_code=500, detail=f"An unexpected error occurred: {e!s}"
+        ) from e

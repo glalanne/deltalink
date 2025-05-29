@@ -16,7 +16,20 @@ router = APIRouter()
 auth = get_auth()
 
 
-@router.post("/data/append", status_code=status.HTTP_204_NO_CONTENT, tags=["Data"])
+@router.post(
+    "/data",
+    summary="Append data to a Delta table",
+    description="""Simulare to SQL INSERT new data to an existing 
+                   Delta table in Unity Catalog.""",
+    response_description="Data appended successfully.",
+    responses={
+        204: {"description": "Data appended successfully."},
+        400: {"description": "Bad Request - No data provided to append to the table."},
+    },
+    response_model=None,
+    status_code=status.HTTP_204_NO_CONTENT,
+    tags=["Data"],
+)
 async def load_table(input: DeltaTableInsert) -> None:
     unity = await get_unity()
 
@@ -41,7 +54,15 @@ async def load_table(input: DeltaTableInsert) -> None:
     return None
 
 
-@router.post("/data/merge", status_code=status.HTTP_204_NO_CONTENT, tags=["Data"])
+@router.patch(
+    "/data",
+    summary="Merge data into a Delta table, similar to SQL MERGE",
+    description="""Similar to SQL UPDATE, it takes the given dataset and updates 
+                    existing rows based on a predicateDelta table in Unity Catalog.""",
+    response_description="Data merged successfully.",
+    status_code=status.HTTP_204_NO_CONTENT,
+    tags=["Data"],
+)
 async def merge_table(input: DeltaTableMerge) -> None:
     unity = await get_unity()
 
@@ -74,7 +95,22 @@ async def merge_table(input: DeltaTableMerge) -> None:
     return None
 
 
-@router.post("/data/delete", status_code=status.HTTP_204_NO_CONTENT, tags=["Data"])
+@router.delete(
+    "/data",
+    summary="Delete rows from a Delta table",
+    description="""Simulare to SQL DELETE, it takes the given dataset and deletes 
+                   rows from an existing Delta table in Unity Catalog 
+                   based on a predicate.""",
+    response_description="Rows deleted successfully.",
+    responses={
+        204: {"description": "Rows deleted successfully."},
+        400: {
+            "description": "Bad Request - No data provided to delete from the table."
+        },
+    },
+    status_code=status.HTTP_204_NO_CONTENT,
+    tags=["Data"],
+)
 async def merge_delete_table(input: DeltaTableDelete) -> None:
     unity = await get_unity()
 

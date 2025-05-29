@@ -113,12 +113,70 @@ class DeltaTableMerge(BaseModel):
     updates: Optional[dict[str, str]] = None
     """mapping of target column to source column"""
 
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "catalog_name": "main",
+                    "schema_name": "backhouse",
+                    "table_name": "sales_suppliers",
+                    "values": [
+                        {
+                            "supplierID": "007",
+                            "name": "Martini & Olives beverages",
+                            "ingredient": "olives",
+                            "continent": "Europe",
+                            "city": "London",
+                            "district": "Westminster",
+                            "size": "L",
+                        }
+                    ],
+                    "predicate": "target.supplierID = source.supplierID",
+                    "updates": {
+                        "name": "source.name",
+                        "ingredient": "source.ingredient",
+                        "continent": "source.continent",
+                        "city": "source.city",
+                        "district": "source.district",
+                        "size": "source.size",
+                    },
+                }
+            ]
+        }
+    }
+
 
 class DeltaTableInsert(BaseModel):
     catalog_name: str
     schema_name: str
     table_name: str
     values: list[object]  # data to merge into the table
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "catalog_name": "main",
+                    "schema_name": "backhouse",
+                    "table_name": "sales_suppliers",
+                    "values": [
+                        {
+                            "supplierID": "007",
+                            "name": "Martini & Olives",
+                            "ingredient": "olives",
+                            "continent": "Europe",
+                            "city": "London",
+                            "district": "Westminster",
+                            "size": "L",
+                            "longitude": "0.1357",
+                            "latitude": "51.4975",
+                            "approved": "Y",
+                        }
+                    ],
+                }
+            ]
+        }
+    }
 
 
 class DeltaTableDelete(BaseModel):

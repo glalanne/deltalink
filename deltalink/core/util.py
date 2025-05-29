@@ -46,7 +46,7 @@ def table_config(catalog: UnityCatalog, tables: list[str]) -> dict[str, daft.Dat
 
     for uc_table in uc_tables:
         df = daft.read_deltalake(uc_table)
-        table_name = f"{uc_table.table_info.catalog_name}.{uc_table.table_info.schema_name}.{uc_table.table_info.name}" # noqa: E501
+        table_name = f"{uc_table.table_info.catalog_name}.{uc_table.table_info.schema_name}.{uc_table.table_info.name}"  # noqa: E501
         catalog_config[table_name] = df
 
     return catalog_config

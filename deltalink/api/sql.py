@@ -27,13 +27,7 @@ class Query(BaseModel):
 async def send_query(
     query: Annotated[
         Query,
-        Body(
-            examples=[
-                {
-                    "query": "select * from main.bakehouse.sales_suppliers"
-                }
-            ]
-        ),
+        Body(examples=[{"query": "select * from main.bakehouse.sales_suppliers"}]),
     ],
     request: Request,
     # user: UserInfo = Depends(auth.scheme),

@@ -14,5 +14,5 @@ auth = get_auth()
     response_model_by_alias=False,
     tags=["Auth"],
 )
-async def read_users_me(current_user: UserInfo = Depends(auth.scheme)) -> UserInfo: # noqa: B008
+async def read_users_me(current_user: UserInfo = Depends(auth.scheme)) -> UserInfo:  # noqa: B008
     return current_user

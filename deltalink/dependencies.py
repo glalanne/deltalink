@@ -2,7 +2,8 @@ from daft.unity_catalog import UnityCatalog
 
 from deltalink.core.config import settings
 
-_catalog:UnityCatalog = None
+_catalog: UnityCatalog = None
+
 
 async def get_unity():
     global _catalog

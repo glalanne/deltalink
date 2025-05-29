@@ -62,7 +62,6 @@ class DeltaTableColumn(BaseModel):
 
 
 class DeltaTable(BaseModel):
-
     comment: Optional[str] = None
     """User-provided free-form text description."""
 
@@ -77,7 +76,6 @@ class DeltaTable(BaseModel):
 
 
 class DeltaTableInfo(BaseModel):
-
     catalog_name: Optional[str] = None
     """Name of parent catalog."""
 
@@ -112,14 +110,16 @@ class DeltaTableMerge(BaseModel):
     table_name: str
     values: list[object]  # data to merge into the table
     predicate: str  # condition for matching rows
-    updates: Optional[dict[str, str]] = None 
+    updates: Optional[dict[str, str]] = None
     """mapping of target column to source column"""
+
 
 class DeltaTableInsert(BaseModel):
     catalog_name: str
     schema_name: str
     table_name: str
     values: list[object]  # data to merge into the table
+
 
 class DeltaTableDelete(BaseModel):
     catalog_name: str

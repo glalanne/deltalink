@@ -17,6 +17,7 @@ itsdangerous = "^2.2.0"
 deltalake = "^0.25.5"
 pandas = "^2.2.3"
 ruff = "^0.11.12"
+pre-commit = "^4.2.0"
 
 
 [build-system]

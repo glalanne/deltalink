@@ -9,7 +9,8 @@
             "name": "Python Debugger: Module",
             "type": "debugpy",
             "request": "launch",
-            "module": "deltalink.main"
+            "module": "deltalink.main",
+            "justMyCode": false
         }
     ]
 }

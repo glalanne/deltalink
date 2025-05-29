@@ -14,11 +14,11 @@ from deltalink.dependencies import get_unity
 from daft.sql import SQLCatalog
 from daft.unity_catalog import UnityCatalog
 
-from deltalink.types.delta_table import DeltaTable, DeltaTableInfo
-from deltalake import write_deltalake
+from deltalink.types.delta_table import DeltaTable, DeltaTableDelete, DeltaTableInfo, DeltaTableInsert, DeltaTableMerge
+from deltalake import write_deltalake, DeltaTable as DeltaLakeTable
 import pandas as pd
 from deltalink.core.config import settings
-from io import StringIO  
+from io import StringIO
 
 router = APIRouter()
 auth = get_auth()
@@ -66,29 +66,110 @@ async def create_table(catalog: str, schema: str, table: DeltaTable) -> DeltaTab
         properties=table.properties,
         table_type="EXTERNAL",
         columns=table.columns,
-
         storage_location=f"{settings.STORAGE_LOCATION}/{catalog}/{schema}/{table.name}/",
     )
 
 
 @router.post(
-    "/catalogs/{catalog}/schemas/{schema}/tables/{table}/append", tags=["Catalog"]
+    "/catalogs/{catalog}/schemas/{schema}/tables/{table}/append", 
+    status_code=status.HTTP_204_NO_CONTENT,
+    tags=["Catalog"]
 )
 async def load_table(
-    catalog: str, schema: str, table: str, values: List[object]
+    catalog: str, schema: str, table: str, input: DeltaTableInsert
 ) -> None:
     unity = await get_unity()
 
-    df = pd.DataFrame({"id": [1, 2, 3]})
-    cache = ensure_io_from_tables(unity, [f"{catalog}.{schema}.{table}"], operation="READ_WRITE")
+    df = pd.DataFrame(input.values)
+    if df.empty:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No data provided to append to the table.",
+        )
+    cache = ensure_io_from_tables(
+        unity, [f"{catalog}.{schema}.{table}"], operation="READ_WRITE"
+    )
     table_config = list(cache)[0]
-    storage_options = {
-        "SAS_TOKEN": table_config.io_config.azure.sas_token
-    }
+    storage_options = {"SAS_TOKEN": table_config.io_config.azure.sas_token}
 
-    return write_deltalake(
+    write_deltalake(
         table_config.table_uri, df, mode="append", storage_options=storage_options
     )
+
+    return None
+
+
+@router.post(
+    "/catalogs/{catalog}/schemas/{schema}/tables/{table}/merge",
+    status_code=status.HTTP_204_NO_CONTENT,
+    tags=["Catalog"]
+)
+async def merge_table(
+    catalog: str, schema: str, table: str,
+    input: DeltaTableMerge
+) -> None:
+    unity = await get_unity()
+
+    df = pd.DataFrame(input.values)
+    if df.empty:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No data provided to append to the table.",
+        )
+
+    cache = ensure_io_from_tables(
+        unity, [f"{catalog}.{schema}.{table}"], operation="READ_WRITE"
+    )
+
+    table_config = list(cache)[0]
+    storage_options = {"SAS_TOKEN": table_config.io_config.azure.sas_token}
+
+    dt = DeltaLakeTable(table_config.table_uri, storage_options=storage_options)
+    dt.merge(  # target data
+        source=df,  # source data
+        predicate=input.predicate,  # condition for matching rows
+        source_alias="source",
+        target_alias="target",
+    ).when_matched_update(  # conditional statement
+        updates=input.updates
+    ).execute()
+
+    return None
+
+
+@router.post(
+    "/catalogs/{catalog}/schemas/{schema}/tables/{table}/remove", 
+    status_code=status.HTTP_204_NO_CONTENT,
+    tags=["Catalog"]
+)
+async def merge_delete_table(
+    catalog: str, schema: str, table: str, input: DeltaTableDelete
+) -> None:
+    unity = await get_unity()
+
+    df = pd.DataFrame(input.values)
+    if df.empty:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No data provided to append to the table.",
+        )
+    cache = ensure_io_from_tables(
+        unity, [f"{catalog}.{schema}.{table}"], operation="READ_WRITE"
+    )
+    table_config = list(cache)[0]
+    storage_options = {"SAS_TOKEN": table_config.io_config.azure.sas_token}
+
+    dt = DeltaLakeTable(table_config.table_uri, storage_options=storage_options)
+    dt.merge(
+        source=df,
+        predicate=input.predicate,
+        source_alias="source",
+        target_alias="target"
+    ).when_matched_delete(
+        predicate="source.deleted = true"
+    ).execute()
+
+    return None
 
 
 @router.post("/query", tags=["Query"])
@@ -130,7 +211,7 @@ async def send_query(
 
     df = daft.sql(q, catalog=sql_catalog)
     plan_io = StringIO()
-    plan = df.explain(True,file=plan_io)
+    plan = df.explain(True, file=plan_io)
 
     content = {"data": df.to_pylist(), "plan": plan_io.getvalue()}
     headers = {"X-Processing-Time": str((datetime.now() - start).total_seconds())}

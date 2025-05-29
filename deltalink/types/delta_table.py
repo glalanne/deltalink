@@ -1,6 +1,7 @@
-from typing import Dict, Iterable, Literal, Optional
+from typing import Dict, Iterable, List, Literal, Optional
 
 from pydantic import BaseModel
+
 
 class DeltaTableColumn(BaseModel):
     comment: Optional[str] = None
@@ -73,6 +74,7 @@ class DeltaTable(BaseModel):
     columns: Iterable[DeltaTableColumn]
     """List of columns in the table."""
 
+
 class DeltaTableInfo(BaseModel):
 
     catalog_name: Optional[str] = None
@@ -101,3 +103,25 @@ class DeltaTableInfo(BaseModel):
 
     columns: Iterable[DeltaTableColumn]
     """List of columns in the table."""
+
+
+class DeltaTableMerge(BaseModel):
+    # catalog: str
+    # schema: str
+    # table: str
+    values: List[object]  # data to merge into the table
+    predicate: str  # condition for matching rows
+    updates: dict[str, str]  # mapping of target column to source column
+
+class DeltaTableInsert(BaseModel):
+    # catalog: str
+    # schema: str
+    # table: str
+    values: List[object]  # data to merge into the table
+
+class DeltaTableDelete(BaseModel):
+    # catalog: str
+    # schema: str
+    # table: str
+    values: List[object]  # data to merge into the table
+    predicate: str  # condition for matching rows

@@ -1,0 +1,9 @@
+.env
+data
+scripts
+tests
+infra
+.venv
+.ruff_cache
+.pytest_cache
+.vscode

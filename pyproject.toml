@@ -14,8 +14,35 @@ sql-metadata = "^2.15.0"
 pydantic-settings = "^2.7.0"
 fastapi-msal = "^2.1.6"
 itsdangerous = "^2.2.0"
+deltalake = "^0.25.5"
+pandas = "^2.2.3"
+ruff = "^0.11.12"
+pre-commit = "^4.2.0"
+pytest = "^8.3.5"
+ray = {extras = ["default"], version = "^2.46.0"}
+gunicorn = "^23.0.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle (error)
+    "F", # pyflakes
+    "B", # bugbear
+    "B9",
+    "C4", # flake8-comprehensions
+    "SIM", # flake8-simplify
+    "I", # isort
+    "UP", # pyupgrade
+    "PIE", # flake8-pie
+    "PGH", # pygrep-hooks
+    "PYI", # flake8-pyi
+    "RUF",
+]
+
+[tool.ruff]
+include = ["pyproject.toml", "deltalink/**/*.py"]
+

@@ -1,0 +1,28 @@
+supplierID,name,ingredient,continent,city,district,size,longitude,latitude,approved
+4000000,Cacao Wonders,cacao,South America,Guayaquil,Las Peñas,M,-79.8974,-2.1791,Y
+4000001,Coconut Grove,coconut,Asia,Manila,Intramuros,S,121.0221,14.6042,Y
+4000002,Almond Delights,almonds,Europe,Valencia,Ruzafa,L,-0.3762,39.4699,Y
+4000003,Sugar Cane Harvest,cane sugar,South America,Sao Paulo,Vila Madalena,XL,-46.6333,-23.5489,Y
+4000004,Vanilla Valley,vanilla,North America,Mexico City,Roma Norte,M,-99.1332,19.4326,Y
+4000005,Pecan Pleasures,pecans,North America,Atlanta,Virginia-Highland,S,-84.3888,33.749,Y
+4000006,Hazelnut Haven,hazelnuts,Europe,Istanbul,Kadıköy,XXL,28.9784,41.0082,Y
+4000007,Cinnamon Spice,cinnamon,Asia,Colombo,Galle Face Green,L,79.8612,6.9271,Y
+4000008,Cashew Corner,cashews,Asia,Goa,Anjuna Beach,XL,73.8067,15.3173,Y
+4000009,Maple Monarch,maple syrup,North America,Montreal,Plateau Mont-Royal,M,-73.5673,45.5017,Y
+4000010,Pistachio Palace,pistachios,Asia,Tehran,Tajrish Bazaar,S,51.4215,35.7106,Y
+4000011,Oat Oasis,oats,Europe,Edinburgh,Stockbridge,L,-3.1883,55.9533,Y
+4000012,Coffee Collective,coffee,South America,Medellin,El Poblado,XXL,-75.5638,6.2518,Y
+4000013,Ginger Gems,ginger,Asia,Chennai,Mylapore,M,80.2707,13.0827,Y
+4000014,Molasses Mills,molasses,Central America,Havana,Vedado,XL,-82.3665,23.1136,Y
+4000015,Honey Hives,honey,Africa,Addis Ababa,Piazza,S,38.7575,9.0084,Y
+4000016,Sesame Seeds,sesame seeds,Asia,Yangon,Chinatown,L,96.1611,16.8409,Y
+4000017,Peanut Plantation,peanuts,Africa,Kano,Kurmi Market,M,8.5167,12.0022,Y
+4000018,Raisin Ranch,raisins,Asia,Kabul,Chicken Street,XXL,69.1763,34.521,Y
+4000019,Cardamom Cove,cardamom,Asia,Kozhikode,Mappila Bay,XL,75.7804,11.2588,Y
+4000020,Clove Cliffs,cloves,Africa,Zanzibar,Stone Town,S,39.1918,-6.167,Y
+4000021,Cocoa Crops,cocoa butter,South America,Caracas,Las Mercedes,M,-66.9036,10.4806,Y
+4000022,Poppy Peaks,poppy seeds,Europe,Krakow,Kazimierz,S,19.9368,50.0647,Y
+4000023,Fennel Fields,fennel seeds,Europe,Florence,Santo Spirito,L,11.2558,43.7695,Y
+4000024,Anise Acres,anise,Asia,Izmir,Alsancak,XL,27.1384,38.4237,Y
+4000025,Nutmeg Nirvana,nutmeg,Asia,Banda Aceh,Peunayong,M,95.3198,5.5577,Y
+4000026,Mace Meadows,mace,Asia,Ambon,Namalatu,S,128.1753,-3.6953,Y

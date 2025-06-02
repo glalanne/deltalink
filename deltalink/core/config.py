@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "DeltaLink"
 
+    RAY_ENABLED: bool = False
+    RAY_ENDPOINT: str | None = None
+
     CLIENT_ID: str
     CLIENT_SECRET: str
     TENANT_ID: str

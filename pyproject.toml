@@ -19,6 +19,7 @@ pandas = "^2.2.3"
 ruff = "^0.11.12"
 pre-commit = "^4.2.0"
 pytest = "^8.3.5"
+ray = {extras = ["default"], version = "^2.46.0"}
 
 
 [build-system]

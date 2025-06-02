@@ -37,4 +37,12 @@ app.include_router(user_router, prefix=settings.API_V1_STR)
 if __name__ == "__main__":
     import uvicorn
 
+    if settings.RAY_ENABLED:
+        import daft
+        import ray
+
+        ray.init()
+
+        daft.context.set_runner_ray(settings.RAY_ENDPOINT)
+
     uvicorn.run(app, host="localhost", port=8000)

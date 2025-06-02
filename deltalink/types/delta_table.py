@@ -104,6 +104,34 @@ class DeltaTableInfo(BaseModel):
     """List of columns in the table."""
 
 
+class DeltaTablePredicate(BaseModel):
+    column: str
+    """Column name to apply the predicate on."""
+
+    operator: Literal["=", "!=", "<", "<=", ">", ">="]
+    """Operator to use for the predicate."""
+
+    value: str
+    """Value to compare against, if applicable."""
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {"column": "supplierID", "operator": "=", "value": "007"},
+                {"column": "continent", "operator": "IN", "value": "Europe"},
+            ]
+        }
+    }
+
+
+class DeltaTableOptimization(BaseModel):
+    catalog_name: str
+    schema_name: str
+    table_name: str
+    partition_filters: Optional[list[DeltaTablePredicate]] = None
+    """List of partition filters to apply during optimization."""
+
+
 class DeltaTableMerge(BaseModel):
     catalog_name: str
     schema_name: str
@@ -151,6 +179,8 @@ class DeltaTableInsert(BaseModel):
     schema_name: str
     table_name: str
     values: list[object]  # data to merge into the table
+    partition_by: Optional[list[str]] = None
+    """List of columns to partition the table by."""
 
     model_config = {
         "json_schema_extra": {
@@ -159,6 +189,7 @@ class DeltaTableInsert(BaseModel):
                     "catalog_name": "main",
                     "schema_name": "backhouse",
                     "table_name": "sales_suppliers",
+                    "partition_by": ["continent", "city"],
                     "values": [
                         {
                             "supplierID": "007",
@@ -185,3 +216,13 @@ class DeltaTableDelete(BaseModel):
     table_name: str
     values: list[object]  # data to merge into the table
     predicate: str  # condition for matching rows
+
+
+class DeltaTableVacuum(BaseModel):
+    catalog_name: str
+    schema_name: str
+    table_name: str
+    retention_hours: Optional[int] = None
+    dry_run: bool = True
+    enforce_retention_duration: bool = True
+    """List of partition filters to apply during optimization."""

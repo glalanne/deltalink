@@ -4,6 +4,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from deltalink.api.catalog import router as catalog_router
 from deltalink.api.data import router as data_router
+from deltalink.api.health import router as health_router
 from deltalink.api.sql import router as sql_router
 from deltalink.api.user import router as user_router
 from deltalink.core.auth import get_auth
@@ -32,7 +33,7 @@ app.include_router(data_router, prefix=settings.API_V1_STR)
 app.include_router(sql_router, prefix=settings.API_V1_STR)
 app.include_router(catalog_router, prefix=settings.API_V1_STR)
 app.include_router(user_router, prefix=settings.API_V1_STR)
-
+app.include_router(health_router)
 
 if __name__ == "__main__":
     import uvicorn

@@ -2,13 +2,19 @@ from collections.abc import Iterable
 from typing import Literal
 
 import daft
+from cachetools import TTLCache
 from daft.unity_catalog import UnityCatalog, UnityCatalogTable
 from fastapi.logger import logger
 from fastapi_msal import MSALClientConfig
 
 from deltalink.core.config import Settings
 
-cache: dict[str, UnityCatalogTable] = {}
+DEFAULT_TIME_TO_LIVE = 60 * 60 - 30  # 1 hour minus 30 seconds
+
+# cache: dict[str, UnityCatalogTable] = {}
+cache = TTLCache(
+    ttl=DEFAULT_TIME_TO_LIVE, maxsize=10000000
+)  # Cache for UnityCatalogTable objects
 
 
 def ensure_io_from_tables(
